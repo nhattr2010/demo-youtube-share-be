@@ -21,6 +21,10 @@ export class MovieInteractionEntity {
 
   @ApiProperty()
   @Prop()
+  value: number;
+
+  @ApiProperty()
+  @Prop()
   createdAt: number;
 
   @ApiProperty()
@@ -28,4 +32,7 @@ export class MovieInteractionEntity {
   updatedAt: number;
 }
 
-export const MovieInteractionSchema = SchemaFactory.createForClass(MovieEntity);
+export const MovieInteractionSchema = SchemaFactory.createForClass(
+  MovieInteractionEntity,
+);
+MovieInteractionSchema.index({ movie: 1, user: 1 }, { unique: true });

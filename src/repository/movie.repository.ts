@@ -35,6 +35,10 @@ export class MovieRepository implements IMovieRepository {
   async createMovie(createMovieDto: CreateMovieDto): Promise<any> {
     const movie = new this.movieModal({
       url: createMovieDto.url,
+      title: createMovieDto.title || 'Lorem ipsum',
+      description:
+        createMovieDto.description ||
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
       createdBy: new Types.ObjectId(createMovieDto.createdBy),
       thumbUp: 0,
       thumbDown: 0,
@@ -62,7 +66,7 @@ export class MovieRepository implements IMovieRepository {
   ): Promise<Array<MovieEntity>> {
     const result = await this.movieModal
       .find(conditions)
-      .populate('createdBy')
+      .populate('createdBy', '-password')
       .sort(sorts)
       .skip(offset)
       .limit(limit)
@@ -70,8 +74,8 @@ export class MovieRepository implements IMovieRepository {
     return result;
   }
 
-  async findOne(conditions: FilterQuery<MovieEntity>): Promise<MovieEntity> {
-    return await this.movieModal.findOne(conditions).exec();
+  async findOne(conditions: FilterQuery<MovieEntity>): Promise<MovieDocument> {
+    return this.movieModal.findOne(conditions).lean();
   }
 
   async countTotalByConditions(
@@ -98,7 +102,7 @@ export class MovieRepository implements IMovieRepository {
 @Injectable()
 export class MockMovieRepository extends MovieRepository {
   async findAll(): Promise<Array<MovieEntity>> {
-    const posts: Array<any> = [
+    const movies: Array<any> = [
       {
         _id: '5fb0b7cd9beb6552ea44e2ac',
         createdBy: {
@@ -128,6 +132,6 @@ export class MockMovieRepository extends MovieRepository {
         __v: 0,
       },
     ];
-    return posts;
+    return movies;
   }
 }

@@ -20,6 +20,16 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'https://funnymovies.nhatth.com',
+      'http://funnymovies.nhatth.com',
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  });
+
   app.setGlobalPrefix('api');
   await app.listen(appConfig?.port ?? 3000, appConfig?.host ?? 'localhost');
   console.debug(`App is listening on ${appConfig?.host}:${appConfig?.port}`);

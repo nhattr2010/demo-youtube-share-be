@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateMovieDto {
   @IsNotEmpty()
@@ -7,18 +7,28 @@ export class CreateMovieDto {
   @IsString()
   url: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  title: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  description: string;
+
   @IsNotEmpty()
   @ApiProperty()
   @IsString()
   createdBy: string;
 
-  @IsNotEmpty()
   @ApiProperty()
   @IsNumber()
+  @IsOptional()
   thumbUp: number;
 
-  @IsNotEmpty()
   @ApiProperty()
   @IsNumber()
+  @IsOptional()
   thumbDown: number;
 }

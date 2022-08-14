@@ -15,7 +15,7 @@ import { ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { MovieService } from './movie.service';
 import { MovieEntity } from '../../model/movie.entity';
 
-@Controller('/api/v1/movie')
+@Controller('/v1/movie')
 @ApiTags('movie')
 export class MovieController {
   private readonly logger = new Logger(MovieController.name);
@@ -33,10 +33,11 @@ export class MovieController {
       this.logger.log(
         `create new movie with information: ${JSON.stringify(createMovieDto)}`,
       );
-      await this.movieService.create(createMovieDto);
+      const data = await this.movieService.create(createMovieDto);
       res.status(HttpStatus.OK).send({
         status: 200,
         message: 'success',
+        data,
       });
     } catch (err) {
       this.logger.error(`create new movie failed with error ${err}`);
@@ -57,7 +58,11 @@ export class MovieController {
   ) {
     try {
       const movie = await this.movieService.findAll(offset, limit);
-      res.status(HttpStatus.OK).send(movie);
+      res.status(HttpStatus.OK).send({
+        status: 200,
+        message: 'success',
+        data: movie,
+      });
     } catch (err) {
       this.logger.log(`find all movie failed with error ${err}`);
       res.status(HttpStatus.FORBIDDEN).send({

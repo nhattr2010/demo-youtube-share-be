@@ -13,7 +13,9 @@ export interface IMovieInteractionRepository {
     createMovieDto: CreateMovieInteractionDto,
   ): Promise<any>;
 
-  findAll(): Promise<Array<MovieInteractionEntity>>;
+  findAll(
+    conditions?: FilterQuery<MovieInteractionEntity>,
+  ): Promise<Array<MovieInteractionEntity>>;
 
   findByConditions(
     conditions: FilterQuery<MovieInteractionEntity>,
@@ -41,16 +43,18 @@ export class MovieInteractionRepository implements IMovieInteractionRepository {
     const movie = new this.movieInteractionModal({
       movie: new Types.ObjectId(createMovieInteractionDto.movie),
       user: new Types.ObjectId(createMovieInteractionDto.user),
+      value: createMovieInteractionDto.value,
       createdAt: moment().valueOf(),
       updatedAt: moment().valueOf(),
     });
     return movie.save();
   }
 
-  async findAll(): Promise<Array<MovieInteractionEntity>> {
+  async findAll(
+    conditions?: FilterQuery<MovieInteractionEntity>,
+  ): Promise<Array<MovieInteractionEntity>> {
     return await this.movieInteractionModal
-      .find({})
-      .populate('createdBy')
+      .find(conditions)
       .sort({
         createdAt: -1,
       })
@@ -65,7 +69,6 @@ export class MovieInteractionRepository implements IMovieInteractionRepository {
   ): Promise<Array<MovieInteractionEntity>> {
     const result = await this.movieInteractionModal
       .find(conditions)
-      .populate('createdBy')
       .sort(sorts)
       .skip(offset)
       .limit(limit)
@@ -83,7 +86,7 @@ export class MovieInteractionRepository implements IMovieInteractionRepository {
 @Injectable()
 export class MockMovieInteractionRepository extends MovieInteractionRepository {
   async findAll(): Promise<Array<MovieInteractionEntity>> {
-    const posts: Array<any> = [
+    const movieInteractions: Array<any> = [
       {
         _id: '5fb0b7cd9beb6552ea44e2ac',
         user: {
@@ -113,6 +116,6 @@ export class MockMovieInteractionRepository extends MovieInteractionRepository {
         __v: 0,
       },
     ];
-    return posts;
+    return movieInteractions;
   }
 }

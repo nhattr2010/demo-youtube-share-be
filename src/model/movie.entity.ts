@@ -16,19 +16,19 @@ export class MovieEntity {
 
   @ApiProperty()
   @Prop()
+  title: string;
+
+  @ApiProperty()
+  @Prop()
+  description: string;
+
+  @ApiProperty()
+  @Prop()
   thumbUp: number;
 
   @ApiProperty()
   @Prop()
   thumbDown: number;
-
-  @ApiProperty()
-  @Prop()
-  createdTime: string;
-
-  @ApiProperty()
-  @Prop()
-  createdTimeMs: number;
 
   @ApiProperty()
   @Prop({ type: Types.ObjectId, ref: UserEntity.name })

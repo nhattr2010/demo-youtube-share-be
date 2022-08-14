@@ -29,9 +29,9 @@ export class MovieService implements IMoviesService {
   async findAll(offset: number, limit: number): Promise<any> {
     const conditions: FilterQuery<MovieEntity> = {};
     const sorts = {
-      createdTime: -1,
+      createdAt: -1,
     };
-    const posts = await this.movieRepository.findByConditions(
+    const movies = await this.movieRepository.findByConditions(
       conditions,
       sorts,
       offset,
@@ -40,7 +40,7 @@ export class MovieService implements IMoviesService {
     const totalRecord = await this.movieRepository.countTotalByConditions(
       conditions,
     );
-    return { posts, totalRecord };
+    return { movies, totalRecord };
   }
 
   async handleNewInteraction(
@@ -54,12 +54,10 @@ export class MovieService implements IMoviesService {
     }
     if (createMovieInteractionDto.value === 1) {
       movie.thumbUp += 1;
-    }
-    if (createMovieInteractionDto.value === 1) {
+    } else {
       movie.thumbDown += 1;
     }
-    return await this.movieRepository.update({
-      ...movie,
-    });
+    await this.movieRepository.update(movie);
+    return movie;
   }
 }

@@ -12,7 +12,7 @@ import { UserEntity } from '../../model/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
-@Controller()
+@Controller('/v1/user')
 export class UserController {
   private readonly logger = new Logger(UserController.name);
 
@@ -29,13 +29,18 @@ export class UserController {
       this.logger.log(
         `create new user with information: ${JSON.stringify(createUserDto)}`,
       );
-      await this.userService.create(createUserDto);
+      let user = await this.userService.findByEmail(createUserDto.email);
+      if (!user) {
+        user = await this.userService.create(createUserDto);
+      }
+      delete user.password;
       res.status(HttpStatus.OK).send({
         status: 200,
         message: 'success',
+        data: user,
       });
     } catch (err) {
-      this.logger.error(`create new post failed with error ${err}`);
+      this.logger.error(`create new user failed with error ${err}`);
       res.status(HttpStatus.FORBIDDEN).send({
         status: 403,
         message: 'Exception error!',

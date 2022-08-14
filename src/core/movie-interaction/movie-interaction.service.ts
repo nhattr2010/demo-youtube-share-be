@@ -1,5 +1,5 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { FilterQuery } from 'mongoose';
+import { Inject, Injectable } from '@nestjs/common';
+import { FilterQuery, Types } from 'mongoose';
 import { MovieEntity } from '../../model/movie.entity';
 import { CreateMovieInteractionDto } from './dto/create-movie-interaction.dto';
 import { IMovieInteractionRepository } from '../../repository/movie-interaction.repository';
@@ -8,6 +8,8 @@ export interface IMovieInteractionService {
   create(createMovieDto: CreateMovieInteractionDto): Promise<any>;
 
   findAll(offset: number, limit: number): Promise<any>;
+
+  findByUserAndMovies(userId: string, movies: string[]): Promise<any>;
 }
 
 @Injectable()
@@ -28,9 +30,9 @@ export class MovieInteractionService implements IMovieInteractionService {
   async findAll(offset: number, limit: number): Promise<any> {
     const conditions: FilterQuery<MovieEntity> = {};
     const sorts = {
-      createdTime: -1,
+      createdAt: -1,
     };
-    const posts = await this.movieInteractionRepository.findByConditions(
+    const interactions = await this.movieInteractionRepository.findByConditions(
       conditions,
       sorts,
       offset,
@@ -38,6 +40,14 @@ export class MovieInteractionService implements IMovieInteractionService {
     );
     const totalRecord =
       await this.movieInteractionRepository.countTotalByConditions(conditions);
-    return { posts, totalRecord };
+    return { interactions, totalRecord };
+  }
+
+  async findByUserAndMovies(userId: string, movies: string[]): Promise<any> {
+    const conditions: FilterQuery<MovieEntity> = {
+      user: new Types.ObjectId(userId),
+      movie: { $in: movies.map((movie) => new Types.ObjectId(movie)) },
+    };
+    return await this.movieInteractionRepository.findAll(conditions);
   }
 }
