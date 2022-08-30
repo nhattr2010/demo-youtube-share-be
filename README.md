@@ -3,6 +3,7 @@
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
   <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
@@ -24,7 +25,15 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a demo Backend for end point of Funny movies base on [Nest](https://github.com/nestjs/nest)
+
+- Use Mongodb for Database
+- Some endpoints:
+    - `POST` `/api/v1/user`: Create new user
+    - `POST` `/api/v1/movie`: Create new movie
+    - `GET` `/api/v1/movie/all`: Get movie list
+    - `POST` `{/api/v1/movie-interaction`: Create new movie interaction
+    - `POST` `{/api/v1/movie-interaction/all/by-user`: Fetch list of movie interactions by user
 
 ## Installation
 
@@ -60,7 +69,8 @@ $ npm run test:cov
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If
+you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
